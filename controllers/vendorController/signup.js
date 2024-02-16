@@ -38,7 +38,7 @@ module.exports = {
       
           const newVendor = await vendor.create(req.body);
       
-          const accessToken = jwt.sign({ id: newVendor._id }, 'jwt_9488', { expiresIn: '7d' });
+          const accessToken = jwt.sign({ id: newVendor._id },process.env.JWT_SECRET, { expiresIn: '7d' });
       
           res.status(201).json({
             accessToken,
@@ -67,7 +67,7 @@ module.exports = {
                     if (foundUser.blockStatus) {
                         res.status(403).json({ message: 'blocked' }) //refuse to authorize it
                     } else {
-                        const accessToken = jwt.sign({ id: foundUser._id, }, 'jwt_9488', { expiresIn: '7d' });
+                        const accessToken = jwt.sign({ id: foundUser._id, }, process.env.JWT_SECRET, { expiresIn: '7d' });
                         res.status(200).json({ accessToken, name: foundUser.name, mobile: foundUser.mobile, document: foundUser.image, status: foundUser.status, reason: foundUser.reason });
                     }
 

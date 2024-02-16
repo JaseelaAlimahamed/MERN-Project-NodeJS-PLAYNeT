@@ -1,13 +1,13 @@
 const express = require('express');
 const app = express();
 const cors = require('cors')
-// require('dotenv/config');
-const PORT = 3001 || 5000;
+const PORT = process.env.PORT || 5000;
 const logger = require('morgan');
 
 
 
 
+require('dotenv/config');
 //routes
 const userRoutes = require('./routers/userRoutes');
 const vendorRoutes = require('./routers/vendorRoutes');

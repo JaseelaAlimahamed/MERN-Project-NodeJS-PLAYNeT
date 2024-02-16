@@ -43,7 +43,7 @@ module.exports = {
 
 
   addTurf: async (req, res) => {
-    const decodedToken = jwt.verify(req.headers.authorization, 'jwt_9488');
+    const decodedToken = jwt.verify(req.headers.authorization,process.env.JWT_SECRET);
     const { venueName, mobile, district, place, actualPrice, discountPercentage, description, image, document, slots, sportFacility, lat, lng } = req.body
     if (!venueName || !mobile || !district || !place || !actualPrice || !discountPercentage || !description || !image || !document || !slots || !sportFacility || !lat || !lng) return res.status(400).json({ message: 'venueName, mobile, district, place, actualPrice, discountPercentage, description, image, document, slots, sportFacility, lat, lng - fields required' })
     venue.create({ vendorId: decodedToken.id, ...req.body }).then(response => {
@@ -57,7 +57,7 @@ module.exports = {
 
   getTurfs: async (req, res) => {
     try {
-      const decodedToken = jwt.verify(req.headers.authorization, 'jwt_9488');
+      const decodedToken = jwt.verify(req.headers.authorization, process.env.JWT_SECRET);
 
       console.log("reached backend ", decodedToken.id)
       const turfs = await venue.find({ vendorId: decodedToken.id });

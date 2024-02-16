@@ -13,7 +13,7 @@ const verifyToken = async (req, res, next) => {
     }
 
     try {
-        const decoded = jwt.verify(token,'jwt_9488');
+        const decoded = jwt.verify(token,process.env.JWT_SECRET);
         if (decoded) 
         next();
     } catch (error) {

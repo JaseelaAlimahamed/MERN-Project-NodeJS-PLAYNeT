@@ -55,7 +55,7 @@ module.exports = {
               } else {
                 req.body.password = await bcrypt.hash(req.body.password, 10);
                 const newUser = await users.create(req.body);
-                const accessToken = jwt.sign({ id: newUser._id }, 'jwt_9488', { expiresIn: '7d' });
+                const accessToken = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
                 res.status(201).json(accessToken);
               }
             } catch (err) {
@@ -79,12 +79,12 @@ module.exports = {
           const existingUser = await users.findOne({ email });
      
           if (existingUser) {
-            const accessToken = jwt.sign({ id: existingUser._id }, 'jwt_9488', { expiresIn: '7d' });
+            const accessToken = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
             return res.status(200).json({ accessToken, name: existingUser.name, email: existingUser.email });
           }
       
           const newUser = await users.create({ email, name: displayName });
-          const accessToken = jwt.sign({ id: newUser._id }, 'jwt_9488', { expiresIn: '7d' });
+          const accessToken = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
           res.status(200).json({ accessToken, name: newUser.name, email: newUser.email });
         } catch (err) {
           console.log(err.message);
@@ -112,7 +112,7 @@ module.exports = {
                 if (foundUser.blockStatus) {
                   return res.status(403).json({ message: 'user blocked by admin' });
                 } else {
-                  const accessToken = jwt.sign({ id: foundUser._id }, 'jwt_9488', { expiresIn: '7d' });
+                  const accessToken = jwt.sign({ id: foundUser._id },process.env.JWT_SECRET, { expiresIn: '7d' });
                   console.log(foundUser);
                   res.status(200).json({
                     accessToken,

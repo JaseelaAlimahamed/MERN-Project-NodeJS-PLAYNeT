@@ -7,8 +7,8 @@ const { log } = require('console')
 const jwt = require('jsonwebtoken');
 
 const instance = new Razorpay({
-    key_id: 'rzp_test_3qOFRfWWDf28ml',
-    key_secret: 'sOAzU6SafVyzkTf4W7RO6IFh'
+    key_id: process.env.RAZORPAY_KEYID,
+    key_secret: process.env.RAZORPAY_SECRET
 });
 
 function isSlotTimePassed(bookedDate, bookedTime) {
@@ -24,7 +24,7 @@ module.exports = {
     bookTurf: async (req, res) => {
         try {
             const authHeader = req.header('Authorization');
-            const verified = jwt.verify(authHeader, 'jwt_9488');
+            const verified = jwt.verify(authHeader, process.env.JWT_SECRET);
             console.log(verified.id);
             if (!req.body.turf || !req.body.method) return res.status(400).json({ message: "turf,method - id,( 'online' || 'wallet' ) field is required" })
             const { turf, slotTime, slotDate, sport, facility, method } = req.body
@@ -63,14 +63,14 @@ module.exports = {
     verifyPayment: async (req, res) => {
         try {
             const authHeader = req.header('Authorization');
-            const verified = jwt.verify(authHeader, 'jwt_9488');
+            const verified = jwt.verify(authHeader, process.env.JWT_SECRET);
            
             const { razorpay_order_id, razorpay_payment_id, razorpay_signature, turfId, slotTime, slotDate, price, sport, facility } = req.body;
             if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !turfId || !slotTime || !slotDate || !price || !sport || !facility) return res.status(400).json({ messaage: 'razorpay_order_id, razorpay_payment_id, razorpay_signature, turfId, slotTime, slotDate, price, sport, facility - fields required' })
             
             const sign = razorpay_order_id + "|" + razorpay_payment_id
 
-            const expectedSign = crypto.createHmac('sha256', 'sOAzU6SafVyzkTf4W7RO6IFh').update(sign.toString()).digest('hex')
+            const expectedSign = crypto.createHmac('sha256',process.env.RAZORPAY_SECRET).update(sign.toString()).digest('hex')
             if (razorpay_signature === expectedSign) {
                 const turf = await venues.findById(turfId)
                 const setPrice = turf.actualPrice - (turf.actualPrice * turf.discountPercentage / 100);

@@ -16,7 +16,7 @@ module.exports = {
           const payload = {
             email: name
           };
-          const accessToken = jwt.sign(payload, 'jwt_9488', { expiresIn: '7d' });
+          const accessToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
           return res.status(200).json({ accessToken });
         } else {
           return res.status(401).json({ message: 'Invalid credentials.' });

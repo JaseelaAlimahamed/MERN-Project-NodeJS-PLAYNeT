@@ -3,8 +3,8 @@ const twilio = require('twilio')
 
 const sendMessage = (mobile,reason,status)=> {
     mobile = Number(mobile)
-    const accountSid = 'AC3495ecdabd3d4cf06336cd610d0e6745';
-    const authToken = 'f5f51816523bd05fe04e029695201f7a';
+    const accountSid = process.env.accountSid;
+    const authToken = process.env.authToken;
     const client = twilio(accountSid, authToken);
     const message = `Enturf Booking  - Your venue manager application has been ${status}. ${reason ? `reason : ${reason}` : '' }`;
     client.messages
