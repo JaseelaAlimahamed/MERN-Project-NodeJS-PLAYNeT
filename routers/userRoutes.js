@@ -6,6 +6,11 @@ const bookingController = require('../controllers/userController/bookingControll
 const verifyToken = require('../middlewares/userVerifyToken');
 
 // signIn SignUp
+
+router.get('/', (req,res)=>{
+    res.render('home')
+})//
+
 router.post('/signup', userController.userSignup) //
 router.post('/signin', userController.userSignin) //
 router.post('/mobileExist', userController.mobileExist) //
